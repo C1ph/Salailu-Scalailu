@@ -1,0 +1,165 @@
+Tehtävä 1 a.
+
+object Kuusi {
+
+  def main(args: Array[String]) = {
+    print("Anna korkeus: ")
+    var korkeus = readInt
+    var i = 0
+
+    while (i < korkeus) {
+      var j = i * 2 + 1
+      tulostaTyhja(korkeus - i - 1)
+      tulostaTahti(j)
+      println()
+      i = i + 1
+
+      def tulostaTyhja(maara: Int) = {
+        var i = 0
+        while (i < maara) {
+          print(" ")
+          i = i + 1
+        }
+      }
+
+      def tulostaTahti(maara: Int) = {
+        var i = 0
+        while (i < maara) {
+          print("*")
+          i = i + 1
+        }
+      }
+    }
+  }
+}
+
+Tehtävä 1 b.
+
+object Karkausvuosi {
+
+  def main(args: Array[String]) = {
+    print("Anna eka vuosi: ")
+    var ekaVuosi = readInt
+    print("Anna toka vuosi: ")
+    var tokaVuosi = readInt
+    tulosta(ekaVuosi)(tokaVuosi)
+  }
+ 
+  def onkoKarkausvuosi(vuosi: Int) = {
+    if (((vuosi % 4 == 0) && (vuosi % 100 != 0)) || ((vuosi % 4000 != 0) && (vuosi % 400 == 0)))
+      true
+    else false
+  }
+ 
+  def tulosta(ekaVuosi: Int)(tokaVuosi: Int) = {
+    var i = ekaVuosi
+    if (ekaVuosi > tokaVuosi)
+      while (i >= tokaVuosi) {
+        if (onkoKarkausvuosi(i))
+          println(i)
+        i = i - 1
+      }
+
+    else
+      while (i <= tokaVuosi) {
+        if (onkoKarkausvuosi(i))
+          println(i)
+        i = i + 1
+      }
+  }
+}
+
+Tehtävä 1 c.
+
+object Jarjesta {
+
+  def main(args: Array[String]) = {
+    args.sorted.foreach(println)
+  }
+}
+
+Tehtävä 2 a.
+
+val koneenLuku = (10*math.random).toInt
+
+object Arvauspeli {
+
+  def main(args: Array[String]) = {
+    val koneenLuku = (10 * math.random).toInt
+    var fyffe = 0
+    print("Anna ensimmainen luku: ")
+    val eka = readInt
+    print("Anna toinen luku: ")
+    val toka = readInt
+    print("Anna kolmas luku: ")
+    val kolmas = readInt
+    println()
+    println("Oikea luku oli " + koneenLuku)
+    if (eka == koneenLuku) {
+      println("eka luku oli oikein")
+      fyffe += 400
+    }
+    if (toka == koneenLuku) {
+      println("toka luku oli oikein")
+      fyffe += 200
+    }
+    if (kolmas == koneenLuku) {
+      println("kolmas luku oli oikein")
+      fyffe += 100
+    }
+    if (fyffe == 0) {
+      println("mikaan luvuista ei ollut oikein")
+      fyffe -= 100
+    }
+    println("Peliraha jaljella: " + fyffe)
+  }
+
+Tehtävä 2 b.
+
+import scala.io.Source
+
+object EtsiTeksti {
+  def main(args: Array[String]) = {
+    if (args.length > 0) {
+      var jatkuu = true
+      while (jatkuu) {
+        print("Anna hakusana: ")
+        var hakusana = readLine
+        if (hakusana.isEmpty) {
+          println("Heippa!")
+          jatkuu = false
+        } else {
+          var i = 0
+          for (line <- Source.fromFile(args(0)).getLines) {
+            i += 1
+            if (line.contains(hakusana))
+              println(i + ": " + line)
+          } 
+        }
+      }
+    } else
+      Console.err.println("Please enter filename")
+  }
+}
+}
+
+Tehtävä 3.
+
+- Scalan tulkki laittaa syötetyt arvot systeemivakioihin
+- Muuttujat määritellään ilmauksella 'var'
+- Esim. uutta funktiota määritellessä tulkki antaa uuden rivin
+- Funktion arvon tyyppi ilmaistaan otsikossa
+- Scalassa ei ole operaatioita ++i ja i++!
+- Foreach-metodi voi saada parametrikseen ns. osittain sovelletun funktion, println-funktion ilman parametria
+- Scalan funktioliteraalisyntaksissa muodolliset parametrit kirjoitetaan ennen operaatiota '=>'
+- Kaarisulkuja käytetään taulukoiden indeksoinnissa -> liittyy apply-metodin toimintaan
+- Uutta: factory-metodi (vastaa Javan staattista luontimetodia!)
+- Scalassa kaikki kaksoispisteeseen päättyvät metodinimet infix-operaatioina tarkoittavat tilannetta, jossa "aksessoitava olio" onkin operaation oikeanpuoleisena jäsenenä, parametri vasemmalla
+- Operaatio ":::" on listakatenaatio
+- Operaatio "::" liittää alkion listan alkuun
+- Tuppelit:  eri tyyppisistä arvoista muodostettu jono on hyvä esimerkiksi tilanteessa, jossa funktion halutaan palauttavan useampia arvoja
+- Listat ja monikot ovat aina muuttumattomia, joukot (Set) ja assosiaatiolistat (Map) voivat olla muuttumattomia tai muutettavia
+- Set-versiot luodaan piirretyypin (trait) avulla
+- Set-piirretyyppien factory-metodit luovat ilmentymiä luokasta HashSet
+- Ilmaus Source.fromFile(args(0)) avaa (jos voi) komentoriviparametrina annetun tiedoston ja palauttaa arvonaan Source-olion
+
