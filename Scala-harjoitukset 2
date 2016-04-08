@@ -1,0 +1,192 @@
+Tehtävä 1 a.
+
+object ListaOperaatio {
+  def main(args: Array[String]): Unit = {
+    var list = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    println("Luvut: " + list)
+    println("Montako parillista on listassa: " + list.count(luku => luku % 2 == 0))
+    println("Löytyykö listasta luku 1: " + list.exists(luku => luku == 1))
+    println("Parittomia: " + list.filter(luku => luku % 2 == 1))
+    println("Ovatko kaikki luvut valilta 1-10: " + list.forall(luku => luku > 0 && luku <= 10))
+    print("Tulostetaan luvut: ")
+    list.foreach(luku => print(luku + " "))
+    println()
+    println("Lisätään jokainen luku 5: " + list.map(luku => luku + 5))
+    println("Poistetaan jokainen luku 2: " + list.filterNot(luku => luku == 2))
+  }
+}
+
+1 b.
+
+import scala.io.Source
+import scala.collection.immutable.Map
+
+object Kaantaja {
+  def main(args: Array[String]) = {
+    if (args.length > 0) {
+      var sanat = Map[String, String]()
+      var i = 0
+      var jatkuu = true
+      var alkukieli = ""
+      try {
+        for (line <- Source.fromFile(args(0)).getLines) {
+          i += 1
+          if (i % 2 != 0) {
+            alkukieli = line
+          } else {
+            sanat += (alkukieli -> line)
+          }
+        }
+      } catch {
+        case ex: Exception =>
+          println(ex)
+          jatkuu = false
+      }
+      println("Sanat on nyt opittu! Anna hakusana (tyhjä lopettaa)")
+      while (jatkuu) {
+        print("Anna hakusana: ")
+        var hakusana = readLine
+        if (hakusana.isEmpty) {
+          println("Nakemiin")
+          jatkuu = false
+        } else if (!sanasto.contains(hakusana)) {
+          println("VIRHE: En tunne sanaa: " + hakusana)
+        } else {
+          println(sanasto(hakusana))
+        }
+      }
+    } else
+      Console.err.println("Please enter filename")
+  }
+}
+
+Tehtävä 2 a.
+
+class SekuntiLaskuri(private var sekunti: Int, private var minuutti: Int, private var tunti: Int) {
+
+  def getSekunnit = if (sekunti < 10) "0" + sekunti else sekunti
+  def getMinuutit = if (minuutti < 10) "0" + minuutti else minuutti
+  def getTunnit = if (tunti < 10) "0" + tunti else tunti
+
+  def this() {
+    this(0, 0, 0)
+  }
+
+  def lisaaSekunti() {
+    if (sekunti == 59) {
+      sekunti = 0
+      lisaaMinuutti
+    } else
+      sekunti = sekunti + 1
+  }
+
+  def lisaaMinuutti() {
+    if (minuutti == 59) {
+      minuutti = 0
+      lisaaTunti
+    } else
+      minuutti = minuutti + 1
+  }
+
+  def lisaaTunti() {
+    if (tunti == 23) {
+      tunti = 0
+    } else
+      tunti = tunti + 1
+  }
+
+  override def toString = getTunnit + ":" + getMinuutit + ":" + getSekunnit
+}
+
+object SekuntiLaskuri {
+
+  def apply: SekuntiLaskuri = {
+    new SekuntiLaskuri
+  }
+
+  def main(args: Array[String]): Unit = {
+    val laskuri = apply
+    var i = 0
+    while (i <= 86400) {
+      println(laskuri)
+      laskuri.lisaaSekunti
+      i = i + 1
+    }
+  }
+
+}
+
+2 b.
+
+class KompleksiLuvut(x: Double, y: Double) {
+
+  def this() {
+    this(0, 0)
+  }
+
+  def getX = x
+  def getY = y
+
+  def summa(that: KompleksiLuvut): KompleksiLuvut = {
+    new KompleksiLuvut(this.getX + that.getX, this.getY + that.getY)
+  }
+
+  def vastaLuku: KompleksiLuvut = {
+    new KompleksiLuvut(0 - this.getX, 0 - this.getY)
+  }
+
+  def erotus(that: KompleksiLuvut): KompleksiLuvut = {
+    new KompleksiLuvut(this.getX, this.getY).summa(that.vastaLuku)
+  }
+
+  def tulo(that: KompleksiLuvut): KompleksiLuvut = {
+    new KompleksiLuvut((this.getX * that.getX - this.getY * that.getY), (this.getX * that.getY + that.getX * this.getY))
+  }
+
+  def kaanteisluku(): KompleksiLuvut = {
+    new KompleksiLuvut(this.getX / (scala.math.pow(this.getX, 2) + scala.math.pow(this.getY, 2)), (0 - this.getY) / (scala.math.pow(this.getX, 2) + scala.math.pow(this.getY, 2)))
+  }
+
+  def osamaara(that: KompleksiLuvut): KompleksiLuvut = {
+    new KompleksiLuvut(this.getX, this.getY).tulo(that.kaanteisluku)
+  }
+
+  override def toString = getX + " + " + getY + "i"
+
+}
+
+object KompleksiLuvut {
+
+  def apply(a: Double, b: Double) = new KompleksiLuvut(a, b)
+
+  def main(args: Array[String]): Unit = {
+    val z1 = apply(1, 2)
+    val z2 = apply(3, 4)
+    val z = apply(5, 6)
+    println("z1: " + z1)
+    println("z2: " + z2)
+    println("z: " + z)
+    println("z1 + z2 = " + z1.summa(z2))
+    println("-z = " + z.vastaLuku)
+    println("z1 - z2 = " + z1.erotus(z2))
+    println("z1 * z2 = " + z1.tulo(z2))
+    println("z^-1 = " + z.kaanteisluku)
+    println("z1 / z2 = " + z1.osamaara(z2))
+  }
+
+}
+
+Tehtävä 3.
+
+- Java-ohjelmoijilla on paha tapa kutsua mitä tahansa nimettyä aliohjelmaa metodiksi! Kun funktiota käytetään Scalassa olio-ohjelmoinnissa olion aksessorina, sitä kutsutaan metodiksi.
+- Myös nolla on olio.
+- Javan tapaan this pitää olla alussa apukonstruktorin algoritmissa.
+- Unit vastaa eräiden kielten "void-metodia".
+- Jos funktio määritellään ilman yhtäsuuruusmerkkiä tyyliin def aseta(a: Int) {...}, sen tyyppi on Unit, vaikka suoritus päättyisi return-lauseeseen!
+- Puolipisteen saa yleensä jättää pois!
+- Scalan kielessä ei ole lainkaan Javan kaltaista static-maailmaa.
+- Luokkamäärittelyn kanssa samassa käännösyksikössä voidaan määritellä luokan kanssa saman niminen ainokainen olio. Tämä auttaa mm. factory-metodien luomisessa.
+- String-tyyppinä käytetään sellaisenaan Javan tyyppiä java.lang.String. Koko pakkaus java.lang näkyy oletusarvoisesti Scala-käännösyksikköön.
+- String-olioiden sisältöjen yhtäsuuruutta voi Scalassa verrata ==-operaatiolla!
+- Ainoastaan merkkejä +, - ja ~ voi käyttää unaarisina prefix-operaatioina.
+- Sana "operaattoripresedenssi" tarkoittaa operaattoreiden sitovuutta.
