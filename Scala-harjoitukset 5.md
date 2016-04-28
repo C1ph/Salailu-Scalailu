@@ -101,7 +101,7 @@ trait Hyvaksytyt extends OpiskelijaJoukko {
 
 trait MililleViisPlus extends OpiskelijaJoukko {
   abstract override def vie(x: Opiskelija) = {
-    if ((x.nimi contains "onni") || (x.nimi contains "Onni")) x.koePisteet += 5
+    if ((x.nimi contains "mili") || (x.nimi contains "Mili")) x.koePisteet += 5
     super.vie(x)
   }
 }
