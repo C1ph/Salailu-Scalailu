@@ -27,7 +27,7 @@ class Luku(var arvo: Int) extends KoristellenTulostettava {
   override def koristemerkki = math.abs(arvo)%256 toChar
 }
 
-class Huutaen(val sana: String) extends KoristellenTulostettava {
+class Sanonta(val sana: String) extends KoristellenTulostettava {
   override def koristettava = sana.toUpperCase
   override val koristemerkki = '!'
 }
